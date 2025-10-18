@@ -41,6 +41,7 @@ Colores y tipografía coherentes con la identidad visual del proyecto.
 Uso de componentes accesibles (<button>, <label>, <input> con atributos name y placeholder).
 
 🧱 3. Estructura de Carpetas Estandarizada (Next.js App Router)
+
 app/
  ├─ admin/
  │   ├─ donations/
