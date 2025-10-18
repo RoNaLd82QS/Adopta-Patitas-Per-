@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * Usa SIEMPRE enums multi-línea
+ */
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Species {
+  DOG
+  CAT
+}
+
+enum Sex {
+  MALE
+  FEMALE
+}
+
+/**
+ * …tu schema continúa, p.ej.
+ */
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Pet {
+  id          String     @id @default(cuid())
+  name        String
+  species     Species
+  sex         Sex
+  ageMonths   Int
+  weightKg    Float?
+  description String?
+  photoUrl    String?
+  followUps   FollowUp[]
+  createdAt   DateTime   @default(now())
+
+  @@index([createdAt])
+}
+
+model FollowUp {
+  id          String          @id @default(cuid())
+  petId       String
+  pet         Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
+  adopterName String
+  notes       String?
+  photos      FollowUpPhoto[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([petId])
+}
+
+model FollowUpPhoto {
+  id         String   @id @default(cuid())
+  followUpId String
+  followUp   FollowUp @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+  url        String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([followUpId])
+}
+
+model DonationMethod {
+  id         String   @id @default(cuid())
+  bankName   String
+  account    String
+  cci        String?
+  logoUrl    String?
+  yapeQrUrl  String?
+  plinQrUrl  String?
+  yapeHolder String?
+  plinHolder String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  date        DateTime
+  location    String?
+  description String?
+  bannerUrl   String?
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([date])
+}
+
+/**
+ * si añadiste ImageSlot, mantenlo también aquí
+ */
