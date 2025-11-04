@@ -1,37 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🧩 1. Estándares de Lenguaje (TypeScript + React + Next.js)
+✅ Buenas prácticas aplicadas
 
-## Getting Started
+Tipado estático con TypeScript (.ts / .tsx)
+Permite detectar errores antes de ejecutar el código.
 
-First, run the development server:
+Componentes modulares y reutilizables
+Cada página (page.tsx) y componente (HeroSlider, NavBar, etc.) está encapsulado.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Funciones puras y async/await para operaciones con Prisma y Fetch API.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Uso de Server Actions ("use server")
+Estandariza las funciones del lado del servidor según Next.js 15.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Separación de lógica y presentación
+(Por ejemplo: /app/admin/donations/page.tsx muestra, /app/admin/donations/actions.ts procesa).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Convenciones de nombres camelCase / PascalCase
 
-## Learn More
+Archivos: createPet.ts, page.tsx
 
-To learn more about Next.js, take a look at the following resources:
+Componentes: HeroSlider, NavBar
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Variables: bankName, photoUrl, createdAt
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🎨 2. Estándares de Diseño y Frontend (Tailwind CSS + UI)
+✅ Buenas prácticas
 
-## Deploy on Vercel
+Uso de Tailwind CSS, que promueve:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Clases utilitarias concisas.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Adopta-Patitas-Per-
+Consistencia visual.
+
+Responsividad integrada (md:grid-cols-2, sm:hidden, etc.).
+
+Diseño responsive-first compatible con móviles y desktop.
+
+Colores y tipografía coherentes con la identidad visual del proyecto.
+
+Uso de componentes accesibles (<button>, <label>, <input> con atributos name y placeholder).
+
+🧱 3. Estructura de Carpetas Estandarizada (Next.js App Router)
+
+app/
+ ├─ admin/
+ │   ├─ donations/
+ │   ├─ pets/
+ │   ├─ events/
+ │   └─ images/
+ ├─ adopta/
+ ├─ api/
+ ├─ components/
+ ├─ lib/
+ │   ├─ prisma.ts
+ │   └─ upload.ts
+ ├─ layout.tsx
+ ├─ globals.css
+ └─ page.tsx
+
+
+Ventajas:
+
+Rutas automáticas por carpeta (/admin/pets, /adopta).
+
+Separación clara entre backend (/lib, /api) y frontend (/app, /components).
+
+Código limpio, mantenible y escalable.
+
+⚙️ 4. Estándares de Base de Datos (Prisma ORM)
+✅ Buenas prácticas
+
+Migraciones versionadas (prisma/migrations/).
+
+Enums y modelos tipados para evitar errores (ej: enum Role { ADMIN USER }).
+
+Índices y claves únicas (@id, @unique, @@index).
+
+Campos automáticos:
+@default(now()), @updatedAt garantizan trazabilidad.
+
+Relaciones entre modelos:
+@relation(fields: [petId], references: [id], onDelete: Cascade).
+
+🛡️ 5. Estándares de Seguridad
+
+Variables sensibles (como DATABASE_URL, NEXTAUTH_SECRET) están en .env y nunca en el código.
+
+Formularios protegidos con CSRF mediante NextAuth.
+
+Uploads gestionados desde el servidor (saveImage en /lib/upload.ts).
+
+Roles definidos: ADMIN, USER (control de acceso).
+
+🧰 6. Control de Versiones (Git/GitHub)
+
+Repositorio limpio con .gitignore que excluye:
+
+node_modules, .next, .env, logs, etc.
+
+Commits descriptivos:
+
+feat: añadir módulo de donaciones
+
+fix: corregir error en upload de imagen
+
+chore: actualizar dependencias
+
+📐 7. Estilo de Código (Linter y Formateador)
+
+ESLint (archivo eslint.config.mjs).
+
+Prettier o formateo automático de código con Visual Studio Code.
+
+Consistencia en espacios, comillas, indentación y saltos de línea.
+
+🧠 8. Buenas prácticas UX/UI
+
+Botones y formularios accesibles y descriptivos.
+
+Mensajes de error claros (“No hay mascotas publicadas 🐾”).
+
+Textos alternativos (alt) en imágenes.
+
+Diseño visual coherente con el branding de AdoptaPatitas.
+
+🧾 Resumen rápido
+Categoría	Estándar / Tecnología
+Lenguaje principal	TypeScript (JS moderno)
+Framework	Next.js 15 (App Router)
+Librería UI	React 19 + Tailwind CSS
+ORM / BD	Prisma ORM + SQLite
+Control de versiones	Git / GitHub
+Seguridad	NextAuth + Variables .env
+Código limpio	ESLint + Prettier
+Arquitectura	Basada en rutas y roles (admin/usuario)
