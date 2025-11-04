@@ -39,7 +39,7 @@ model User {
 }
 
 model Pet {
-  id          String     @id @default(cuid())
+  id          String        @id @default(cuid())
   name        String
   species     Species
   sex         Sex
@@ -48,7 +48,9 @@ model Pet {
   description String?
   photoUrl    String?
   followUps   FollowUp[]
-  createdAt   DateTime   @default(now())
+  createdAt   DateTime      @default(now())
+  Adoption    Adoption[]
+  Publication Publication[]
 
   @@index([createdAt])
 }
@@ -62,6 +64,8 @@ model FollowUp {
   photos      FollowUpPhoto[]
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
+  Adoption    Adoption?       @relation(fields: [adoptionId], references: [id])
+  adoptionId  String?
 
   @@index([petId])
 }
@@ -110,3 +114,53 @@ model Event {
 /**
  * si añadiste ImageSlot, mantenlo también aquí
  */
+
+// Registro de adopciones (para vincular certificado y seguimiento)
+model Adoption {
+  id           String       @id @default(cuid())
+  petId        String
+  pet          Pet          @relation(fields: [petId], references: [id])
+  adopterName  String
+  adopterEmail String
+  adopterPhone String?
+  status       String       @default("PENDING") // PENDING | APPROVED | REJECTED | COMPLETED
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  certificate  Certificate?
+  followUps    FollowUp[]
+}
+
+// Certificados emitidos para adopciones aprobadas
+model Certificate {
+  id         String   @id @default(cuid())
+  adoptionId String   @unique
+  adoption   Adoption @relation(fields: [adoptionId], references: [id])
+  number     String   @unique
+  pdfUrl     String
+  issuedBy   String
+  issuedAt   DateTime @default(now())
+}
+
+// Publicaciones de mascotas (para comprobación / moderación)
+model Publication {
+  id          String    @id @default(cuid())
+  petId       String
+  pet         Pet       @relation(fields: [petId], references: [id])
+  title       String
+  description String?
+  status      String    @default("PENDING") // PENDING | APPROVED | REJECTED
+  reviewedBy  String?
+  reviewedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Registro de reportes generados (para descargar informes)
+model ReportLog {
+  id        String   @id @default(cuid())
+  type      String // ADOPTIONS | DONATIONS | PETS | PUBLICATIONS
+  format    String // CSV | PDF
+  fileUrl   String
+  createdBy String
+  createdAt DateTime @default(now())
+}
