@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/prisma";
+// app/admin/followups/new/page.tsx
+import prisma from "@/lib/prisma";
 import { createFollowUp } from "../actions";
 
 export default async function NewFollowUpPage() {
@@ -13,7 +14,7 @@ export default async function NewFollowUpPage() {
 
       <label className="block text-sm text-gray-700">Mascota</label>
       <select name="petId" className="border rounded w-full p-2" required>
-        <option value="" disabled selected>
+        <option value="" disabled>
           Selecciona una mascota…
         </option>
         {pets.map((p) => (
@@ -34,6 +35,13 @@ export default async function NewFollowUpPage() {
         placeholder="Notas (opcional)"
         className="border rounded w-full p-2 min-h-28"
       />
+
+      {/* inputs base por si quieres crear con fotos */}
+      <div className="grid md:grid-cols-3 gap-3">
+        <input type="file" name="photo0" accept="image/*" />
+        <input type="file" name="photo1" accept="image/*" />
+        <input type="file" name="photo2" accept="image/*" />
+      </div>
 
       <button className="rounded px-3 py-2 bg-green-600 text-white">
         Guardar
