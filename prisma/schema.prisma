@@ -24,6 +24,7 @@ enum Sex {
   MALE
   FEMALE
 }
+
 enum AdoptionStatus {
   PENDING
   APPROVED
@@ -54,9 +55,9 @@ model Pet {
   description String?
   photoUrl    String?
   followUps   FollowUp[]
-  adoptions   Adoption[] 
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime @updatedAt
+  adoptions   Adoption[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt @default(now())  // <-- agrega @default(now())
   @@index([createdAt])
 }
 
@@ -64,7 +65,7 @@ model FollowUp {
   id          String          @id @default(cuid())
   petId       String
   pet         Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
-   adoptionId  String?
+  adoptionId  String?
   adoption    Adoption?       @relation("AdoptionFollowUps", fields: [adoptionId], references: [id], onDelete: SetNull)
   adopterName String
   notes       String?
@@ -117,38 +118,38 @@ model Event {
 }
 
 model Adoption {
-  id           String          @id @default(cuid())
-  petId        String
-  pet          Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
+  id    String @id @default(cuid())
+  petId String
+  pet   Pet    @relation(fields: [petId], references: [id], onDelete: Cascade)
 
   adopterName  String
   adopterEmail String
   adopterPhone String?
-  status       AdoptionStatus  @default(PENDING)
-  followUps    FollowUp[] @relation("AdoptionFollowUps")
+  status       AdoptionStatus @default(PENDING)
+  followUps    FollowUp[]     @relation("AdoptionFollowUps")
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([petId])
   @@index([adopterEmail])
 }
 
 model Profile {
-  id         String   @id @default(cuid())
-  userId     String   @unique
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  name       String?
-  lastName   String?
-  birthDate  DateTime?
-  address    String?
-  district   String?
-  province   String?
-  dni        String?
+  name      String?
+  lastName  String?
+  birthDate DateTime?
+  address   String?
+  district  String?
+  province  String?
+  dni       String?
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 /**
