@@ -41,6 +41,7 @@ model User {
   role         Role     @default(USER)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  profile      Profile?
 }
 
 model Pet {
@@ -63,6 +64,8 @@ model FollowUp {
   id          String          @id @default(cuid())
   petId       String
   pet         Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
+   adoptionId  String?
+  adoption    Adoption?       @relation("AdoptionFollowUps", fields: [adoptionId], references: [id], onDelete: SetNull)
   adopterName String
   notes       String?
   photos      FollowUpPhoto[]
@@ -122,11 +125,6 @@ model Adoption {
   adopterEmail String
   adopterPhone String?
   status       AdoptionStatus  @default(PENDING)
-
-  // Si más adelante añades Certificate, conecta aquí:
-  // certificate  Certificate?
-
-  // back-relation con FollowUp
   followUps    FollowUp[] @relation("AdoptionFollowUps")
 
   createdAt    DateTime @default(now())
