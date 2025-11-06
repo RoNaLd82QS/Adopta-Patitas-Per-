@@ -1,3 +1,4 @@
+// components/NavBar.tsx
 "use client";
 
 import Link from "next/link";
@@ -29,6 +30,8 @@ export default function NavBar() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const isInAdmin = pathname.startsWith("/admin");
+
+  const email = session?.user?.email ?? null;
   const role = (session as any)?.user?.role || (session as any)?.role || "USER";
 
   return (
@@ -46,34 +49,37 @@ export default function NavBar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          {role === "ADMIN" ? (
-            isInAdmin ? (
-              // Dentro del panel
-              <>
+          {/* Logueado */}
+          {email ? (
+            <>
+              {/* Correo del usuario como acceso a su perfil */}
+              <Link
+                href="/perfil"
+                title="Ver mi perfil"
+                className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium"
+              >
+                {email}
+              </Link>
+
+              {/* Si es admin, muestra chip para entrar al panel */}
+              {role === "ADMIN" && !isInAdmin && (
                 <Link
                   href="/admin"
-                  className="rounded-full border px-4 py-1.5 text-sm"
+                  className="rounded-full bg-amber-300 px-3 py-1.5 text-sm font-semibold text-slate-900 hover:bg-amber-400"
                 >
-                  Administrador
+                  Admin
                 </Link>
-                <button
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="rounded-full bg-yellow-400 px-4 py-1.5 text-sm font-semibold text-slate-900 hover:bg-yellow-500"
-                >
-                  Salir
-                </button>
-              </>
-            ) : (
-              // Fuera del panel, pero logueado como admin
-              <Link
-                href="/admin"
-                className="rounded-full bg-yellow-400 px-4 py-1.5 text-sm font-semibold text-slate-900 hover:bg-yellow-500"
+              )}
+
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="rounded-full border px-3 py-1.5 text-sm hover:bg-slate-50"
               >
-                Admin
-              </Link>
-            )
+                Salir
+              </button>
+            </>
           ) : (
-            // No admin / no logueado
+            // No logueado
             <Link
               href="/login"
               className="rounded-full bg-yellow-400 px-4 py-1.5 text-sm font-semibold text-slate-900 hover:bg-yellow-500"

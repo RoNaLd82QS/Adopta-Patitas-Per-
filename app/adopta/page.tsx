@@ -1,4 +1,4 @@
-// app/adopta/page.tsx
+//app/adopta/page.tsx
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 

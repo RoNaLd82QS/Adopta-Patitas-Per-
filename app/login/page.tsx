@@ -1,3 +1,4 @@
+// app/login/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -9,7 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const params = useSearchParams();
-  const callbackUrl = params.get("callbackUrl") || "/";
+  const callbackUrl = params.get("callbackUrl") || "/perfil"; // 👈 debe ser /perfil (no /profile)
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -19,8 +20,12 @@ export default function LoginPage() {
       redirect: false,
       callbackUrl,
     });
-    if (res?.ok) router.push(callbackUrl);
-    else alert("Credenciales inválidas");
+
+    if (res?.ok) {
+      router.push(callbackUrl);
+    } else {
+      alert("Credenciales inválidas");
+    }
   }
 
   return (
@@ -47,7 +52,11 @@ export default function LoginPage() {
             required
           />
         </div>
-        <button className="rounded-lg bg-blue-600 text-white px-4 py-2">
+
+        <button
+          type="submit"
+          className="rounded-lg bg-blue-600 text-white px-4 py-2 hover:bg-blue-700"
+        >
           Entrar
         </button>
       </form>

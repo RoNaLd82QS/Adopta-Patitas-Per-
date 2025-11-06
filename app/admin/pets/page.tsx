@@ -1,4 +1,4 @@
-// app/admin/pets/page.tsx
+//app/admin/pets/page.tsx
 import prisma from "@/lib/prisma";
 import { createPet, deletePet } from "./actions";
 

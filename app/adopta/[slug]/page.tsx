@@ -2,8 +2,9 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import AdoptButton from "@/components/AdoptButton";
 
-type Params = { slug: string }; // usamos slug como ID del Pet
+type Params = { slug: string };
 
 export async function generateMetadata({ params }: { params: Params }) {
   const pet = await prisma.pet.findUnique({ where: { id: params.slug } });
@@ -40,13 +41,9 @@ export default async function PetDetailPage({ params }: { params: Params }) {
           )}
 
           <div className="mt-6 flex gap-3">
-            {/* Aquí enlazas a tu flujo de postulación/contacto */}
-            <Link
-              href="/como-adoptar"
-              className="rounded bg-amber-400 px-4 py-2 font-medium hover:bg-amber-500"
-            >
-              Quiero adoptar
-            </Link>
+            {/* 🔽 aquí va el botón que valida sesión/crea la solicitud */}
+            <AdoptButton petId={pet.id} />
+
             <Link
               href="/adopta"
               className="rounded border px-4 py-2 hover:bg-slate-50"

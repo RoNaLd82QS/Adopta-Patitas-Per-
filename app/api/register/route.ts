@@ -1,53 +1,47 @@
+// app/api/register/route.ts
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
+type Body = {
+  email: string;
+  password: string;
+  confirm: string;
+};
+
+function isEmail(v: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
 
 export async function POST(req: Request) {
   try {
     const {
-      name,
-      lastName,
-      birthDate,
-      address,
-      district,
-      province,
-      dni,
-      email,
-      password,
-    } = await req.json();
+      email: rawEmail,
+      password = "",
+      confirm = "",
+    } = (await req.json()) as Body;
 
-    if (
-      !name ||
-      !lastName ||
-      !birthDate ||
-      !address ||
-      !district ||
-      !province ||
-      !dni ||
-      !email ||
-      !password
-    ) {
+    const email = (rawEmail || "").trim().toLowerCase();
+    if (!isEmail(email)) {
+      return NextResponse.json({ error: "Correo inválido" }, { status: 400 });
+    }
+    if (password.length < 8) {
       return NextResponse.json(
-        { error: "Campos obligatorios faltantes" },
+        { error: "La contraseña debe tener al menos 8 caracteres" },
+        { status: 400 }
+      );
+    }
+    if (password !== confirm) {
+      return NextResponse.json(
+        { error: "Las contraseñas no coinciden" },
         { status: 400 }
       );
     }
 
-    if (password.length < 6) {
-      return NextResponse.json(
-        { error: "La contraseña debe tener al menos 6 caracteres" },
-        { status: 400 }
-      );
-    }
-
-    const exists = await prisma.user.findFirst({
-      where: { OR: [{ email: email.toLowerCase() }, { dni }] },
-    });
+    const exists = await prisma.user.findUnique({ where: { email } });
     if (exists) {
       return NextResponse.json(
-        { error: "Email o DNI ya registrado" },
+        { error: "Ya existe una cuenta con ese correo" },
         { status: 409 }
       );
     }
@@ -55,23 +49,16 @@ export async function POST(req: Request) {
     const passwordHash = await bcrypt.hash(password, 10);
 
     await prisma.user.create({
-      data: {
-        email: email.toLowerCase(),
-        passwordHash,
-        role: "USER",
-        name,
-        lastName,
-        birthDate: new Date(birthDate),
-        address,
-        district,
-        province,
-        dni,
-      },
+      data: { email, passwordHash }, // role USER por defecto en tu schema
+      select: { id: true },
     });
 
     return NextResponse.json({ ok: true });
-  } catch (e: any) {
-    console.error(e);
-    return NextResponse.json({ error: "Error al registrar" }, { status: 500 });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { error: "No se pudo registrar" },
+      { status: 500 }
+    );
   }
 }

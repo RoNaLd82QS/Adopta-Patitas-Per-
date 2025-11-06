@@ -1,3 +1,4 @@
+//app/admin/pets/actions.ts
 "use server";
 
 import prisma from "@/lib/prisma";
@@ -7,6 +8,21 @@ import { saveImage } from "@/lib/upload";
 /** helpers */
 function s(v: FormDataEntryValue | null) {
   return typeof v === "string" ? v.trim() : "";
+}
+function toNumberOrNull(v: FormDataEntryValue | null) {
+  if (typeof v !== "string") return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+function pickAgeMonths(fd: FormData) {
+  // admite ageMonths directamente, o ageYears (conversión -> meses)
+  const months = toNumberOrNull(fd.get("ageMonths"));
+  if (months !== null) return Math.max(0, months);
+
+  const years = toNumberOrNull(fd.get("ageYears"));
+  if (years !== null) return Math.max(0, years * 12);
+
+  return 0;
 }
 
 /** Crear mascota */
@@ -24,18 +40,8 @@ export async function createPet(formData: FormData) {
   const photo = formData.get("photo") as File | null;
   const photoUrl = await saveImage(photo, "pets"); // string | null
 
-  if (!name) return;
-
   await prisma.pet.create({
-    data: {
-      name,
-      species,
-      sex,
-      ageMonths,
-      weightKg,
-      description,
-      photoUrl,
-    },
+    data: { name, species, sex, ageMonths, weightKg, description, photoUrl },
   });
 
   revalidatePath("/admin/pets");
@@ -47,30 +53,25 @@ export async function updatePet(id: string, formData: FormData) {
   const name = s(formData.get("name"));
   const species = (s(formData.get("species")) || "DOG") as "DOG" | "CAT";
   const sex = (s(formData.get("sex")) || "MALE") as "MALE" | "FEMALE";
-  const ageMonths = Number(s(formData.get("ageMonths"))) || 0;
+  const ageMonths = pickAgeMonths(formData);
 
-  const w = formData.get("weightKg");
-  const weightKg = typeof w === "string" && w !== "" ? Number(w) : null;
-
+  const weightKg = toNumberOrNull(formData.get("weightKg"));
   const description = s(formData.get("description")) || null;
 
-  // si suben una foto nueva, la guardamos y actualizamos; si no, mantenemos la actual
-  const photo = formData.get("photo") as File | null;
-  const newPhotoUrl = await saveImage(photo, "pets"); // string | null
-
-  const data: any = {
-    name,
-    species,
-    sex,
-    ageMonths,
-    weightKg,
-    description,
-  };
-  if (newPhotoUrl) data.photoUrl = newPhotoUrl;
+  const file = formData.get("photo") as File | null;
+  const newPhotoUrl = await saveImage(file, "pets"); // string | null
 
   await prisma.pet.update({
     where: { id },
-    data,
+    data: {
+      name,
+      species,
+      sex,
+      ageMonths,
+      weightKg,
+      description,
+      ...(newPhotoUrl ? { photoUrl: newPhotoUrl } : {}),
+    },
   });
 
   revalidatePath("/admin/pets");

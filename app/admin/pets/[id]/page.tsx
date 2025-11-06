@@ -1,3 +1,4 @@
+// app/admin/pets/[id]/page.tsx
 import prisma from "@/lib/prisma";
 import { updatePet } from "../actions";
 
