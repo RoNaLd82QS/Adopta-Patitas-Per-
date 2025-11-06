@@ -1,3 +1,4 @@
+//app/admin/layout.tsx
 import type { ReactNode } from "react";
 import { requireAdmin } from "@/lib/auth"; // deja este import si ya lo usas
 import PillLink from "@/components/PillLink";
@@ -20,6 +21,7 @@ export default async function AdminLayout({
         <PillLink href="/admin" exact>
           Dashboard
         </PillLink>
+        <PillLink href="/admin/users">Usuarios</PillLink> {/* nuevo */}
         <PillLink href="/admin/donations">Donaciones</PillLink>
         <PillLink href="/admin/events">Eventos</PillLink>
         <PillLink href="/admin/pets">Mascotas</PillLink>

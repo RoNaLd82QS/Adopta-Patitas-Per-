@@ -20,6 +20,7 @@ export default async function AdminDashboard() {
         <Pill href="/admin" active>
           Dashboard
         </Pill>
+        <Pill href="/admin/users">Usuarios</Pill>
         <Pill href="/admin/donations">Donaciones</Pill>
         <Pill href="/admin/events">Eventos</Pill>
         <Pill href="/admin/pets">Mascotas</Pill>

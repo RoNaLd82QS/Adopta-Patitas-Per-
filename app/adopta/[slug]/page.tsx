@@ -42,7 +42,11 @@ export default async function PetDetailPage({ params }: { params: Params }) {
 
           <div className="mt-6 flex gap-3">
             {/* 🔽 aquí va el botón que valida sesión/crea la solicitud */}
-            <AdoptButton petId={pet.id} />
+            <AdoptButton
+              petId={pet.id}
+              petName={pet.name}
+              petDescription={pet.description}
+            />
 
             <Link
               href="/adopta"

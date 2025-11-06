@@ -1,3 +1,4 @@
+//app/admin/donations/page.tsx
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { saveImage } from "@/lib/upload";
