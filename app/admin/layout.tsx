@@ -27,6 +27,7 @@ export default async function AdminLayout({
         <PillLink href="/admin/pets">Mascotas</PillLink>
         <PillLink href="/admin/followups">Seguimientos</PillLink>
         <PillLink href="/admin/images">Imágenes</PillLink>
+        <PillLink href="/admin/certificados">Certificados</PillLink>
       </nav>
 
       {children}

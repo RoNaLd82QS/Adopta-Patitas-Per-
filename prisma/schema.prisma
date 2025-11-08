@@ -63,6 +63,20 @@ model FollowUpPhoto {
   @@index([followUpId])
 }
 
+model AdoptionCertificate {
+  id                String   @id @default(cuid())
+  adoptionId        String   @unique
+  certificateNumber String   @unique
+  bookImageUrl      String?
+  signatureUrl      String?
+  issuedAt          DateTime @default(now())
+
+  adoption Adoption @relation("AdoptionCertificate", fields: [adoptionId], references: [id], onDelete: Cascade)
+
+  @@index([certificateNumber])
+  @@index([issuedAt])
+}
+
 model DonationMethod {
   id         String   @id @default(cuid())
   bankName   String
@@ -111,12 +125,12 @@ model Adoption {
   updatedAt    DateTime @updatedAt
 
   // relaciones
-  user      User?           @relation(fields: [userId], references: [id])
-  pet       Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
-  photos    AdoptionPhoto[]
-  followUps FollowUp[]      @relation("AdoptionFollowUps")
+  user        User?                @relation(fields: [userId], references: [id])
+  pet         Pet                  @relation(fields: [petId], references: [id], onDelete: Cascade)
+  photos      AdoptionPhoto[]
+  followUps   FollowUp[]           @relation("AdoptionFollowUps")
+  certificate AdoptionCertificate? @relation("AdoptionCertificate") // <— NUEVO
 
-  // 👇 deja SOLO esta línea de status (sin comillas)
   status AdoptionStatus @default(PENDING)
 
   @@unique([petId, adopterEmail])

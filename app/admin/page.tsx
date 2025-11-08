@@ -26,6 +26,7 @@ export default async function AdminDashboard() {
         <Pill href="/admin/pets">Mascotas</Pill>
         <Pill href="/admin/followups">Seguimientos</Pill>
         <Pill href="/admin/images">Imágenes</Pill>
+        <Pill href="/admin/certificados">Certificados</Pill>
       </nav>
 
       {/* Tarjetas de métricas */}
