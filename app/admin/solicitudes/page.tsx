@@ -1,5 +1,4 @@
 // app/admin/solicitudes/page.tsx
-// app/admin/solicitudes/page.tsx
 import prisma from "@/lib/prisma";
 import { aprobarSolicitud, rechazarSolicitud } from "./actions";
 import { getServerSession } from "next-auth";
@@ -139,6 +138,16 @@ export default async function SolicitudesAdminPage({ searchParams }: Props) {
                 </td>
               </tr>
             ))}
+            <div className="mb-4 flex gap-2">
+              <a
+                className="rounded border px-3 py-1 hover:bg-slate-50"
+                href={`/admin/solicitudes/pdf${
+                  email ? `?email=${encodeURIComponent(email)}` : ""
+                }`}
+              >
+                Descargar PDF
+              </a>
+            </div>
 
             {solicitudes.length === 0 && (
               <tr>

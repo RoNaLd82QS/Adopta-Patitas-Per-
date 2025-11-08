@@ -23,44 +23,6 @@ export default async function AdminFollowUpsPage() {
     <section className="mx-auto max-w-5xl p-6 space-y-8">
       <h1 className="text-3xl font-bold">Seguimiento post-adopción</h1>
 
-      {/* Crear seguimiento */}
-      <form action={createFollowUp} className="rounded border p-4 grid gap-3">
-        <h3 className="text-lg font-semibold">Nuevo seguimiento</h3>
-
-        <select name="petId" className="border rounded p-2" required>
-          <option value="">— Mascota —</option>
-          {pets.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
-
-        <input
-          name="adopterName"
-          placeholder="Nombre del adoptante"
-          className="border rounded p-2"
-          required
-        />
-
-        <textarea
-          name="notes"
-          placeholder="Notas (opcional)"
-          className="border rounded p-2 min-h-28"
-        />
-
-        {/* Sube hasta 3 por defecto (puedes duplicar más) */}
-        <div className="grid md:grid-cols-3 gap-3">
-          <input type="file" name="photo0" accept="image/*" />
-          <input type="file" name="photo1" accept="image/*" />
-          <input type="file" name="photo2" accept="image/*" />
-        </div>
-
-        <button className="mt-2 rounded bg-emerald-600 px-4 py-2 text-white">
-          Guardar
-        </button>
-      </form>
-
       {/* Tabla */}
       <div className="rounded border divide-y bg-white">
         {rows.map((r) => (
@@ -80,7 +42,7 @@ export default async function AdminFollowUpsPage() {
                 href={`/admin/followups/${r.id}`}
                 className="rounded bg-slate-700 text-white px-3 py-2"
               >
-                Ver / Editar
+                Ver
               </a>
 
               <form action={deleteFollowUp}>

@@ -17,15 +17,16 @@ export default async function FollowUpDetail({ params }: { params: Params }) {
   });
   if (!row) return notFound();
 
+  // ✅ Enlaza las Server Actions con el id (bound actions)
+  const updateAction = updateFollowUp.bind(null, row.id);
+  const addPhotosAction = addFollowUpPhotos.bind(null, row.id);
+
   return (
     <section className="mx-auto max-w-4xl p-6 space-y-8">
       <h1 className="text-2xl font-bold">Seguimiento de {row.pet.name}</h1>
 
       {/* Editar cabecera */}
-      <form
-        action={(fd) => updateFollowUp(row.id, fd)}
-        className="rounded border p-4 grid gap-3"
-      >
+      <form action={updateAction} className="rounded border p-4 grid gap-3">
         <label className="text-sm font-medium">Adoptante</label>
         <input
           name="adopterName"
@@ -57,10 +58,7 @@ export default async function FollowUpDetail({ params }: { params: Params }) {
       </form>
 
       {/* Subir nuevas fotos */}
-      <form
-        action={(fd) => addFollowUpPhotos(row.id, fd)}
-        className="rounded border p-4 grid gap-3"
-      >
+      <form action={addPhotosAction} className="rounded border p-4 grid gap-3">
         <h3 className="text-lg font-semibold">Agregar fotos</h3>
         <div className="grid sm:grid-cols-3 gap-3">
           <input type="file" name="photo0" accept="image/*" />
