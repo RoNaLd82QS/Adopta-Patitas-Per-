@@ -73,3 +73,96 @@ Colores, espaciado, tipografía y proporciones.
 
 ### ✔ Buenas prácticas UX  
 Mensajes claros, botones accesibles, feedback visual.
+
+# 🧱 3. **Estructura del Proyecto (Next.js App Router)**
+
+La arquitectura del proyecto sigue las convenciones oficiales de **Next.js 15**, utilizando el App Router para obtener rutas automáticas, server components, server actions y una separación clara entre frontend, backend y lógica compartida.
+app/
+ ├─ (public)/
+ │   └─ layout.tsx          # Layout visible para todos los usuarios
+ │
+ ├─ adopta/                 # Sección pública para adopciones
+ │   ├─ page.tsx            # Página principal de adopciones
+ │   └─ [id]/               # Vista de cada mascota en detalle
+ │       └─ page.tsx
+ │
+ ├─ admin/                  # Panel administrativo (requiere rol ADMIN)
+ │   ├─ layout.tsx          # Layout privado para administradores
+ │   ├─ pets/               # Gestión de mascotas
+ │   │   ├─ page.tsx
+ │   │   ├─ actions.ts      # CRUD server actions
+ │   │   └─ new/            # Crear nueva mascota
+ │   │       └─ page.tsx
+ │   │
+ │   ├─ donations/          # Gestión de donaciones
+ │   │   ├─ page.tsx
+ │   │   └─ actions.ts
+ │   │
+ │   ├─ events/             # Gestión de eventos
+ │   │   └─ page.tsx
+ │   │
+ │   └─ images/             # Gestión de recursos multimedia
+ │       └─ page.tsx
+ │
+ ├─ api/                    # Endpoints (Route Handlers)
+ │   ├─ upload/
+ │   │   └─ route.ts        # Subida de imágenes
+ │   └─ auth/
+ │       └─ [...nextauth]   # API de autenticación NextAuth
+ │
+ ├─ components/             # Componentes UI reutilizables
+ │   ├─ NavBar.tsx
+ │   ├─ Footer.tsx
+ │   ├─ HeroSlider.tsx
+ │   └─ PetCard.tsx
+ │
+ ├─ lib/                    # Lógica compartida entre backend/frontend
+ │   ├─ prisma.ts           # Cliente Prisma (singleton)
+ │   ├─ upload.ts           # Función para manejar imágenes
+ │   ├─ auth.ts             # Configuración de NextAuth
+ │   └─ utils.ts            # Funciones auxiliares
+ │
+ ├─ globals.css             # Estilos globales (Tailwind incluido)
+ ├─ layout.tsx              # Layout raíz del proyecto
+ └─ page.tsx                # Página principal (Landing Page)
+
+# ⚙️ 4. **Base de Datos (Prisma ORM + SQLite)**
+
+### ✔ Modelos tipados  
+Incluye enums, relaciones y validaciones.
+
+### ✔ Migraciones versionadas  
+Carpeta: `prisma/migrations/`.
+
+### ✔ Campos automáticos  
+- `@default(now())`  
+- `@updatedAt`
+
+### ✔ Relaciones seguras  
+`onDelete: Cascade`
+
+### ✔ Base de datos apta para GitHub  
+- SQLite (`dev.db`) → **NO se sube**  
+- Configuración segura en `.env`:
+
+- # 🛡️ 5. **Estándares de Seguridad**
+
+✔ Variables sensibles en `.env`  
+✔ Roles: `ADMIN` / `USER`  
+✔ Subidas de imagen seguras desde el servidor  
+✔ Sesiones y autenticación con NextAuth  
+✔ Sanitización de datos  
+
+---
+feat: añadir módulo de adopciones
+fix: corregir validación de formulario
+chore: actualizar dependencias
+docs: mejorar README
+# 🧰 6. **Control de Versiones (Git + GitHub)**
+
+### `.gitignore` incluye:
+- `.env`
+- `node_modules/`
+- `.next/`
+- `dev.db`
+- `logs/`
