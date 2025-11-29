@@ -1,182 +1,75 @@
-# 🐾 Adopta-Patitas — Estándares del Proyecto
+<div align="center">
 
-Este documento define los estándares técnicos, de diseño, arquitectura y buenas prácticas aplicadas al proyecto **Adopta-Patitas Perú**.
-
----
-
-# 🧩 1. Estándares de Lenguaje (TypeScript + React + Next.js)
-✅ Buenas prácticas aplicadas
-
-### ✔ Tipado estático con TypeScript (.ts / .tsx)
-Permite detectar errores en tiempo de desarrollo antes de ejecutar código.
-
-### ✔ Componentes modulares y reutilizables
-Cada página (page.tsx) y componente (HeroSlider, NavBar, etc.) está encapsulado.
-
-### ✔ Funciones puras + async/await
-Uso correcto para operaciones con Prisma y Fetch API.
-
-### ✔ Uso de Server Actions ("use server")
-Estandariza la lógica del lado del servidor en Next.js 15.
-
-### ✔ Separación de lógica y presentación
-- /app/admin/donations/page.tsx → interfaz
-- /app/admin/donations/actions.ts → operaciones CRUD
-
-### ✔ Convenciones de nombres
-- camelCase → variables (photoUrl, createdAt)
-- PascalCase → componentes (HeroSlider, NavBar)
+# 🐾 **Adopta-Patitas Perú**
+### Plataforma web para adopción responsable de mascotas  
+Desarrollado con **Next.js 15**, **React 19**, **TypeScript**, **Prisma ORM** y **Tailwind CSS**.
 
 ---
 
-# 🎨 2. Estándares de Diseño y Frontend (Tailwind CSS + UI)
-✅ Buenas prácticas aplicadas
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=nextdotjs)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-4-38B2AC?style=for-the-badge&logo=tailwindcss)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-### ✔ Tailwind CSS eficiente
-- Clases utilitarias limpias
-- Diseño responsive-first
-- Breakpoints como md:grid-cols-2, sm:hidden
-
-### ✔ Consistencia visual
-Colores, espaciados y tipografía uniforme.
-
-### ✔ Accesibilidad
-Uso de:
-- `<button>`
-- `<label>`
-- `<input>`
-- textos alternativos `alt=""`
+</div>
 
 ---
 
-# 🧱 3. Estructura de Carpetas (Next.js 15 — App Router)
-app/
-├─ admin/
-│ ├─ donations/
-│ ├─ pets/
-│ ├─ events/
-│ └─ images/
-├─ adopta/
-├─ api/
-├─ components/
-├─ lib/
-│ ├─ prisma.ts
-│ └─ upload.ts
-├─ layout.tsx
-├─ globals.css
-└─ page.tsx
+## 📌 **Descripción del Proyecto**
 
+**Adopta-Patitas Perú** es una plataforma web diseñada para:
 
-### ✔ Ventajas
-- Rutas automáticas según carpetas
-- Separación clara frontend/backend
-- Escalable y mantenible
+- Publicar mascotas disponibles en adopción 🐶🐱  
+- Facilitar el registro de postulantes  
+- Gestionar solicitudes desde un panel de administrador  
+- Garantizar un proceso de adopción **responsable y transparente**
+
+El sistema incluye:
+
+- Autenticación de usuarios  
+- Gestión de mascotas  
+- Solicitudes de adopción  
+- Carga de imágenes  
+- Roles (**ADMIN** / **USER**)  
+- Arquitectura moderna con Server Actions
 
 ---
 
-# ⚙️ 4. Estándares de Base de Datos (Prisma ORM)
-✅ Buenas prácticas aplicadas
+# 🧩 1. **Estándares de Lenguaje (TypeScript + React + Next.js)**
 
-### ✔ Migraciones versionadas
-Ubicadas en: prisma/migrations/
+### ✔ Tipado estático con TypeScript  
+Evita errores antes de ejecutar el código.
 
-### ✔ Modelos y enums tipados
-enum Role {
-ADMIN
-USER
-}
+### ✔ Componentes modulares y reutilizables  
+Páginas y componentes totalmente encapsulados.
 
-### ✔ Índices y claves
-- @id
-- @unique
-- @@index
+### ✔ Server Actions (`"use server"`)  
+Lógica del servidor de forma segura y optimizada.
 
-### ✔ Campos automáticos
-- @default(now())
-- @updatedAt
+### ✔ Separación de lógica y UI  
+- `/page.tsx` → interfaz  
+- `/actions.ts` → lógica (CRUD)
 
-### ✔ Relaciones
-
-### ✔ Base de datos lista para GitHub
-- Usa SQLite (archivo local dev.db)
-- No se sube porque está en .gitignore
-- `DATABASE_URL="file:./dev.db"` en `.env`
-
-Esto permite que el repositorio esté limpio sin exponer datos sensibles.
+### ✔ Convenciones de nombres  
+- camelCase (photoUrl, createdAt)  
+- PascalCase (HeroSlider, NavBar)
 
 ---
 
-# 🛡️ 5. Estándares de Seguridad
+# 🎨 2. **Estándares de Diseño (Tailwind CSS + UX)**
 
-### ✔ Variables sensibles en .env
-- DATABASE_URL  
-- NEXTAUTH_SECRET  
+### ✔ Diseño responsive-first  
+Compatible con móviles, tablet y desktops.
 
-### ✔ Roles
-- ADMIN  
-- USER  
+### ✔ Estilo visual consistente  
+Colores, espaciado, tipografía y proporciones.
 
-### ✔ Uploads seguros
-Manejo desde `/lib/upload.ts`.
+### ✔ Accesibilidad  
+- Labels visibles  
+- Textos alternativos `alt=""`  
+- Inputs descriptivos  
 
-### ✔ Autenticación
-Gestionada con NextAuth.
-
----
-
-# 🧰 6. Control de Versiones (Git/GitHub)
-
-### ✔ .gitignore incluye:
-- .env
-- .next/
-- node_modules/
-- *.db
-- logs/
-
-### ✔ Commits siguiendo convención
-
----
-
-# 📐 7. Estilo de Código (Linter + Prettier)
-
-### ✔ ESLint configurado
-Archivo: eslint.config.mjs
-
-### ✔ Formateo automático
-Consistencia en:
-- indentación
-- comillas
-- saltos de línea
-
----
-
-# 🧠 8. Buenas prácticas UX/UI
-
-### ✔ Accesibilidad
-- `<label>` en formularios  
-- Mensajes claros  
-- Imágenes con `alt=""`
-
-### ✔ Mensajes amigables
-Ejemplo:
-> “No hay mascotas publicadas 🐾”
-
----
-
-# 🧾 Resumen rápido
-
-| Categoría | Estándar / Tecnología |
-|----------|------------------------|
-| Lenguaje | TypeScript (JS moderno) |
-| Framework | Next.js 15 (App Router) |
-| UI | React 19 + Tailwind CSS |
-| ORM / BD | **Prisma ORM + SQLite (listo para subir a GitHub sin exponer datos sensibles)** |
-| Seguridad | NextAuth + Roles |
-| Arquitectura | App Router + Server Actions |
-| Versionado | Git + GitHub |
-
----
-
-# ✔ Proyecto listo para desarrollo y despliegue
-El código es escalable, ordenado, seguro y compatible con buenas prácticas modernas de Next.js 15 y Prisma ORM.
-
+### ✔ Buenas prácticas UX  
+Mensajes claros, botones accesibles, feedback visual.
